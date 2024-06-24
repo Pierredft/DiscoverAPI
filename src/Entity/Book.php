@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
@@ -15,6 +16,9 @@ class Book
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $coverText = null;
 
     public function getId(): ?int
     {
@@ -29,6 +33,18 @@ class Book
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getCoverText(): ?string
+    {
+        return $this->coverText;
+    }
+
+    public function setCoverText(string $coverText): static
+    {
+        $this->coverText = $coverText;
 
         return $this;
     }
