@@ -20,7 +20,10 @@ class BookRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder("b")
             ->setFirstResult(($page -1) * $limit)
             ->setMaxResults($limit);
-        return $qb->getQuery()->getREsult();
+
+        $query = $qb->getQuery();
+        $query->setFetchMode(Book::class, "author",\Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
+        return $query->getResult();
     }
 
     //    /**
