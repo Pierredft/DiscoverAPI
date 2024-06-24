@@ -22,6 +22,7 @@ class BookRepository extends ServiceEntityRepository
             ->setMaxResults($limit);
 
         $query = $qb->getQuery();
+        // sert à récupérer les données de l'entité Author en même temps que les données de l'entité Book
         $query->setFetchMode(Book::class, "author",\Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
         return $query->getResult();
     }
