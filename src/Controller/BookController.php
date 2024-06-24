@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
- use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface;
 
 class BookController extends AbstractController
 {
