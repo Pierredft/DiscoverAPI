@@ -2,15 +2,20 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Book;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        for ($i =0; $i < 20; $i++) {
+            $livre = new Book;
+            $livre->setTitle('Livre' . $i);
+            $livre->setCoverText('Quatrième de couverture numéro :' . $i);
+            $manager->persist($livre);
+        }
 
         $manager->flush();
     }
