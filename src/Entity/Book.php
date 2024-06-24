@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -18,8 +19,10 @@ class Book
     #[Groups(["getBooks","getAuthors"])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     #[Groups(["getBooks", "getAuthors"])]
+    #[Assert\NotBlank(message: "Le titre du livre est obligatoire")]
+    #[Assert\Length(min:1, max:255, minMessage: "Le titre doit faire au moins {{ limit }} caractères", maxMessage: "Le titre doit faire au maximum {{ limit }} caractères")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]

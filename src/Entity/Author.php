@@ -23,7 +23,8 @@ class Author
     #[Groups(["getBooks", "getAuthors"])]
     private ?string $LastName = null;
 
-    #[ORM\OneToMany(mappedBy:"author", targetEntity: Book::class)]
+    #[ORM\OneToMany(mappedBy:"author", targetEntity: Book::class, orphanRemoval: true)]
+    #[Groups(["getAuthors"])]
     private $books;
 
     public function getId(): ?int
