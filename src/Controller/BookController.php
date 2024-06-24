@@ -6,15 +6,16 @@ use App\Repository\BookRepository;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BookController extends AbstractController
 {
-    #[Route('/api/books', name: 'app_book', methods: ['GET'])]
-    public function getBookList(BookRepository $bookRepository): JsonResponse
+    #[Route('/api/books', name: 'book', methods: ['GET'])]
+    public function getBookList(BookRepository $bookRepository, SerializerInterface $serializer): JsonResponse
     {
         $bookList = $bookRepository->findAll();
-        return new JsonResponse([
-            'books' => $bookList,
-        ]);
+        $jsonBookList = $serializer->serialize($bookList,'json');
+        return new JsonResponse($jsonBookList, Response::HTTP_OK,[], true);
     }
 }
