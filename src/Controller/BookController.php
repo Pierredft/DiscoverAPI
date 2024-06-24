@@ -92,15 +92,31 @@ class BookController extends AbstractController
     }
 
     #[Route("/api/books/{id}", name:"updateBook", methods: ["PUT"])]
-        public function updateBook(Request $request, SerializerInterface $serializer, Book $currentBook, EntityManagerInterface $em, AuthorRepository $authorRepository): JsonResponse
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour modifier un livre')]
+        public function updateBook(Request $request, SerializerInterface $serializer, Book $currentBook, EntityManagerInterface $em, AuthorRepository $authorRepository, ValidatorInterface $validator, TagAwareCacheInterface $cache): JsonResponse
     { 
-        // $updatedBook = $serializer->deserialize($request->getContent(), Book::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $currentBook]);
-        $updatedBook = $serializer->deserialize($request->getContent(), Book::class, 'json');
+        $newBook = $serializer->deserialize($request->getContent(), Book::class,'json');
+        $currentBook->setTitle($newBook->getTitle());
+        $currentBook->setCoverText($newBook->getCoverText());
+        $errors = $validator->validate($currentBook);
+        if (count($errors) > 0) {
+            return new JsonResponse($serializer->serialize($errors, 'json'), Response::HTTP_BAD_REQUEST, [], true);
+        }
         $content = $request->toArray();
         $idAuthor = $content['idAuthor'] ?? -1;
-        $updatedBook->setAuthor($authorRepository->find($idAuthor));
-        $em->persist($updatedBook);
+        $currentBook->setAuthor($authorRepository->find($idAuthor));
+        $em->persist($currentBook);
         $em->flush();
+        $cache->invalidateTags(["booksCache"]);
+
+        
+        // $updatedBook = $serializer->deserialize($request->getContent(), Book::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $currentBook]);
+        // $updatedBook = $serializer->deserialize($request->getContent(), Book::class, 'json');
+        // $content = $request->toArray();
+        // $idAuthor = $content['idAuthor'] ?? -1;
+        // $updatedBook->setAuthor($authorRepository->find($idAuthor));
+        // $em->persist($updatedBook);
+        // $em->flush();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 }
