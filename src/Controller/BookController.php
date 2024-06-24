@@ -31,6 +31,7 @@ class BookController extends AbstractController
 
         $jsonBookList = $cache->get($idCache, function (ItemInterface $item) use ($bookRepository, $page, $limit, $serializer){
             $item->tag("booksCache");
+            // $item->expireAfter(60);
             $bookList = $bookRepository->findAllWithPagination($page, $limit);
                 return $serializer->serialize($bookList, 'json', ['groups' => 'getBooks']);
         });
@@ -50,8 +51,10 @@ class BookController extends AbstractController
     }
 
     #[Route ('/api/books/{id}', name: 'deleteBook', methods: ['DELETE'])]
-        public function deleteBook(Book $book, EntityManagerInterface $em): JsonResponse
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un livre')]
+        public function deleteBook(Book $book, EntityManagerInterface $em, TagAwareCacheInterface $cachePool): JsonResponse
     {
+        $cachePool->invalidateTags(["booksCache"]);
         $em->remove($book);
         $em->flush();
 
