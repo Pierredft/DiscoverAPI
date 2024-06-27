@@ -8,6 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Author>
+ *
+ * @method Author|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Author|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Author[]    findAll()
+ * @method Author[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AuthorRepository extends ServiceEntityRepository
 {
@@ -15,39 +20,35 @@ class AuthorRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Author::class);
     }
-    public function findAllWithPagination($page, $limit){
-        $qb = $this->createQueryBuilder("b")
-            ->setFirstResult(($page -1) * $limit)
+    public function findAllWithPagination($page, $limit)
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
-
-        $query = $qb->getQuery();
-        // sert à récupérer les données de l'entité Author en même temps que les données de l'entité Book
-        $query->setFetchMode(Author::class, "book",\Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
-        return $query->getResult();
+        return $qb->getQuery()->getResult();
     }
+//    /**
+//     * @return Author[] Returns an array of Author objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('a.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
-    //    /**
-    //     * @return Author[] Returns an array of Author objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Author
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+//    public function findOneBySomeField($value): ?Author
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

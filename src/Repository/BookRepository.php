@@ -8,6 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Book>
+ *
+ * @method Book|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Book|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Book[]    findAll()
+ * @method Book[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class BookRepository extends ServiceEntityRepository
 {
@@ -16,15 +21,12 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
-    public function findAllWithPagination($page, $limit){
-        $qb = $this->createQueryBuilder("b")
-            ->setFirstResult(($page -1) * $limit)
+    public function findAllWithPagination($page, $limit)
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
-
-        $query = $qb->getQuery();
-        // sert à récupérer les données de l'entité Author en même temps que les données de l'entité Book
-        $query->setFetchMode(Book::class, "author",\Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
-        return $query->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     //    /**

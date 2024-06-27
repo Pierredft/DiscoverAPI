@@ -9,42 +9,36 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Since;
-
-
 /**
- * @Hateoas\Relation(
- *      "self",
- *      href = @Hateoas\Route(
- *          "detailBook",
- *          parameters = { "id" = "expr(object.getId())" },
- *      ),
- *     exclusion = @Hateoas\Exclusion(groups="getBooks")
- * )
- *
- */
-
+* @Hateoas\Relation(
+*      "self",
+*      href = @Hateoas\Route(
+*          "detailBook",
+*          parameters = { "id" = "expr(object.getId())" },
+*      ),
+*      exclusion = @Hateoas\Exclusion(groups="getBooks")
+* )
+*
+* @Hateoas\Relation(
+*      "delete",
+*      href = @Hateoas\Route(
+*          "deleteBook",
+*          parameters = { "id" = "expr(object.getId())" },
+*      ),
+*      exclusion = @Hateoas\Exclusion(groups="getBooks", excludeIf = "expr(not is_granted('ROLE_ADMIN'))"),
+* )
+*
+* @Hateoas\Relation(
+*      "update",
+*      href = @Hateoas\Route(
+*          "updateBook",
+*          parameters = { "id" = "expr(object.getId())" },
+*      ),
+*      exclusion = @Hateoas\Exclusion(groups="getBooks", excludeIf = "expr(not is_granted('ROLE_ADMIN'))"),
+* )
+*
+*/
 #[ORM\Entity(repositoryClass: BookRepository::class)]
-/**
- * @Hateoas\Relation(
- *     "delete",
- *    href = @Hateoas\Route(
- *        "deleteBook",
- *       parameters = { "id" = "expr(object.getId())" },
- *     ),
- *    exclusion = @Hateoas\Exclusion(groups="getBooks", excludeIf="expr(not is_granted('ROLE_ADMIN'))"),
- * )
- * 
- * @Hateoas\Relation(
- *    "update",
- *   href = @Hateoas\Route(
- *      "updateBook",
- *     parameters = { "id" = "expr(object.getId())" },
- *  ),
- * exclusion = @Hateoas\Exclusion(groups="getBooks", excludeIf="expr(not is_granted('ROLE_ADMIN'))"),
- * )
- * 
- */
-// #[ApiResource()]
 class Book
 {
     #[ORM\Id]
