@@ -78,9 +78,9 @@ class BookController extends AbstractController
         }
         $em->persist($book);
         $em->flush();
-        $content = $request->toArray();
-        $idAuthor = $content['idAuthor'] ?? -1;
-        $book->setAuthor($authorRepository->find($idAuthor));
+        $content = $request->toArray(); // On récupère le contenu de la requête sous forme de tableau
+        $idAuthor = $content['idAuthor'] ?? -1; // Si idAuthor n'est pas présent dans le tableau $content, on lui attribue la valeur -1
+        $book->setAuthor($authorRepository->find($idAuthor)); // On attribue l'auteur au livre
         
 
         // $jsonBook = $serializer->serialize($book,'json', ['groups'=> 'getBooks']);
@@ -102,12 +102,12 @@ class BookController extends AbstractController
         if (count($errors) > 0) {
             return new JsonResponse($serializer->serialize($errors, 'json'), Response::HTTP_BAD_REQUEST, [], true);
         }
-        $content = $request->toArray();
-        $idAuthor = $content['idAuthor'] ?? -1;
-        $currentBook->setAuthor($authorRepository->find($idAuthor));
-        $em->persist($currentBook);
-        $em->flush();
-        $cache->invalidateTags(["booksCache"]);
+        $content = $request->toArray(); // On récupère le contenu de la requête sous forme de tableau
+        $idAuthor = $content['idAuthor'] ?? -1; // Si idAuthor n'est pas présent dans le tableau $content, on lui attribue la valeur -1
+        $currentBook->setAuthor($authorRepository->find($idAuthor)); // On attribue l'auteur au livre
+        $em->persist($currentBook); // On persiste le livre
+        $em->flush(); // On enregistre les modifications
+        $cache->invalidateTags(["booksCache"]); // On invalide le cache
 
         
         // $updatedBook = $serializer->deserialize($request->getContent(), Book::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $currentBook]);
