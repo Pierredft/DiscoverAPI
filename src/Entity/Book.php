@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Since;
 
 
 /**
@@ -68,6 +69,7 @@ class Book
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(["getBooks"])]
+    #[Since("2.0")]
     private ?string $comment = null;
 
     public function getId(): ?int
