@@ -11,7 +11,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Since;
 /**
 * @Hateoas\Relation(
-*      "self",
+*      name = "self",
 *      href = @Hateoas\Route(
 *          "detailBook",
 *          parameters = { "id" = "expr(object.getId())" },
@@ -20,7 +20,7 @@ use JMS\Serializer\Annotation\Since;
 * )
 *
 * @Hateoas\Relation(
-*      "delete",
+*      name = "delete",
 *      href = @Hateoas\Route(
 *          "deleteBook",
 *          parameters = { "id" = "expr(object.getId())" },
@@ -29,7 +29,7 @@ use JMS\Serializer\Annotation\Since;
 * )
 *
 * @Hateoas\Relation(
-*      "update",
+*      name = "update",
 *      href = @Hateoas\Route(
 *          "updateBook",
 *          parameters = { "id" = "expr(object.getId())" },
